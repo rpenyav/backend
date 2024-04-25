@@ -1,4 +1,4 @@
-import { TestSuite } from 'src/entities/testsuite.entity';
+import { Projects } from 'src/entities/projects.entity';
 
 export class PaginatedResponse<T> {
   pageNumber: number;

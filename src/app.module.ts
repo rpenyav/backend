@@ -8,6 +8,12 @@ import { ConfigModule } from '@nestjs/config';
 import { TestSuiteController } from './testsuite/testsuite.controller';
 import { TestSuiteService } from './testsuite/testsuite.service';
 import { TestSuite } from './entities/testsuite.entity';
+import { Projects } from './entities/projects.entity';
+import { ProjectController } from './projects/project.controller';
+import { ProjectService } from './projects/project.service';
+import { Comments } from './entities/comments.entity';
+import { CommentsController } from './comments/comments.controller';
+import { CommentsService } from './comments/comments.service';
 
 @Module({
   imports: [
@@ -21,13 +27,18 @@ import { TestSuite } from './entities/testsuite.entity';
       username: 'qaei887',
       password: 'JRK441e22',
       database: 'qaei887',
-      entities: [User, TestSuite],
+      entities: [User, TestSuite, Projects, Comments],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User, TestSuite]),
+    TypeOrmModule.forFeature([User, TestSuite, Projects, Comments]),
     AuthModule,
   ],
-  controllers: [UserController, TestSuiteController],
-  providers: [UserService, TestSuiteService],
+  controllers: [
+    UserController,
+    TestSuiteController,
+    ProjectController,
+    CommentsController,
+  ],
+  providers: [UserService, TestSuiteService, ProjectService, CommentsService],
 })
 export class AppModule {}

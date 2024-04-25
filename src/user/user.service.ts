@@ -5,6 +5,7 @@ import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './create-user.dto';
 import * as bcrypt from 'bcrypt';
+import { UserDto } from './get-user.dto';
 
 @Injectable()
 export class UserService {
@@ -26,5 +27,14 @@ export class UserService {
 
     await this.userRepository.save(newUser);
     return newUser;
+  }
+
+  async getUserByEmail(email: string): Promise<UserDto | undefined> {
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (user) {
+      const { password, ...userWithoutPassword } = user;
+      return userWithoutPassword;
+    }
+    return undefined;
   }
 }

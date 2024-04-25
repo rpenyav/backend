@@ -1,9 +1,12 @@
 // src/testsuites/dto/create-testsuite.dto.ts
-import { IsString, IsEmail } from 'class-validator';
+import { IsString, IsEmail, IsNumber, IsInt } from 'class-validator';
 
 export class CreateTestSuiteDto {
   @IsString()
   sectionTest: string;
+
+  @IsInt()
+  projectId: number;
 
   @IsString()
   linkTest: string;
@@ -25,4 +28,16 @@ export class CreateTestSuiteDto {
 
   @IsString()
   testCreator: string;
+
+  @IsString()
+  testConditions: string;
+
+  @IsString()
+  testResult: string;
+
+  @IsString()
+  testPriority: string;
+
+  @IsString()
+  testStatus: string;
 }

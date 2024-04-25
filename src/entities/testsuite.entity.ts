@@ -1,10 +1,14 @@
 // src/entities/testsuite.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Comments } from './comments.entity';
 
 @Entity()
 export class TestSuite {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  projectId: number;
 
   @Column()
   sectionTest: string;
@@ -29,4 +33,19 @@ export class TestSuite {
 
   @Column()
   testCreator: string;
+
+  @Column()
+  testConditions: string;
+
+  @Column()
+  testResult: string;
+
+  @Column()
+  testPriority: string;
+
+  @Column()
+  testStatus: string;
+
+  @OneToMany(() => Comments, (comment) => comment.testSuite)
+  comments: Comments[];
 }
