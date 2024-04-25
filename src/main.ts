@@ -13,9 +13,19 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
-    origin: 'http://www.rafapenya.com/tester', // Permite solicitudes solo desde este origen
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Métodos HTTP permitidos
-    allowedHeaders: 'Content-Type, Accept', // Cabeceras permitidas
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        'http://rafapenya.com',
+        'http://www.rafapenya.com/tester',
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('CORS not allowed'));
+      }
+    },
+    methods: 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization',
   });
 
   await app.listen(process.env.PORT || 3000);
