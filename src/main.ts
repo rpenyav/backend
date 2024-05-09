@@ -18,6 +18,7 @@ async function bootstrap() {
       'http://rafapenya.com',
       'https://www.rafapenya.com',
       'http://www.rafapenya.com',
+      'http://localhost:3000',
     ],
     methods: 'GET,POST,PUT,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type,Authorization',
