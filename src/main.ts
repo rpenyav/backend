@@ -13,13 +13,7 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
-    origin: [
-      'https://rafapenya.com',
-      'http://rafapenya.com',
-      'https://www.rafapenya.com',
-      'http://www.rafapenya.com',
-      'http://localhost:3000',
-    ],
+    origin: '*',
     methods: 'GET,POST,PUT,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type,Authorization',
   });
