@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Req,
   HttpCode,
+  Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './login.dto';
@@ -29,7 +30,7 @@ export class AuthController {
 
   @Post('verify-token')
   @HttpCode(HttpStatus.OK)
-  async verifyToken(@Req() request: Request) {
+  async verifyToken(@Req() request: Request, @Res() response: Response) {
     const authHeader = request.headers['authorization'];
     if (!authHeader) {
       throw new UnauthorizedException('No token provided');
