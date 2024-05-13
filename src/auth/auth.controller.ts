@@ -45,6 +45,7 @@ export class AuthController {
     return { message: 'Token is valid' };
   }
 
+  // src/auth/auth.controller.ts
   @Post('refresh-token')
   async refreshToken(@Req() request: Request) {
     const authHeader = request.headers['authorization'];
@@ -53,8 +54,10 @@ export class AuthController {
     }
     const oldToken = authHeader.split(' ')[1];
     try {
-      // Decodifica el token antiguo para obtener la información del usuario
       const decodedUser = await this.authService.decodeToken(oldToken);
+      if (!decodedUser || !decodedUser.email) {
+        throw new UnauthorizedException('Invalid or expired token.');
+      }
       const newTokens = await this.authService.refreshToken(decodedUser);
       return {
         access_token: newTokens.access_token,
