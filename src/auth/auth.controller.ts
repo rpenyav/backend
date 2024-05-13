@@ -45,19 +45,24 @@ export class AuthController {
     return { message: 'Token is valid' };
   }
 
+  // En el método refreshToken del controlador
   @Post('refresh-token')
   async refreshToken(@Req() request: Request) {
     const authHeader = request.headers['authorization'];
     if (!authHeader) {
       throw new UnauthorizedException('No token provided');
     }
-    const oldToken = authHeader.split(' ')[1];
+    const refreshToken = authHeader.split(' ')[1]; // Asegúrate de que esto es realmente un refresh token
     try {
-      // Decodificar el oldToken para obtener la información del usuario
-      const decodedUser = await this.authService.decodeToken(oldToken);
+      // Ignorar la expiración solo si estás seguro de que es un refresh token
+      const decodedUser = await this.authService.decodeToken(
+        refreshToken,
+        true,
+      );
       if (!decodedUser) {
-        throw new UnauthorizedException('Invalid token');
+        throw new UnauthorizedException('Invalid refresh token');
       }
+
       const newTokens = await this.authService.refreshToken(decodedUser);
       return {
         access_token: newTokens.access_token,

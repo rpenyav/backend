@@ -41,9 +41,15 @@ export class AuthService {
     }
   }
 
-  async decodeToken(token: string): Promise<any> {
+  // Método en AuthService para decodificar tokens
+  async decodeToken(
+    token: string,
+    ignoreExpiration: boolean = false,
+  ): Promise<any> {
     try {
-      return this.jwtService.verify(token); // Asegúrate de que esté configurado para manejar la verificación de manera apropiada
+      return this.jwtService.verify(token, {
+        ignoreExpiration: ignoreExpiration,
+      });
     } catch (error) {
       throw new UnauthorizedException(
         'Token verification failed: ' + error.message,
