@@ -24,16 +24,16 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { username: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }), // Asegúrate de que la duración sea adecuada
     };
   }
 
-  async verifyToken(token: string): Promise<boolean> {
+  async decodeToken(token: string): Promise<any> {
     try {
-      const decoded = this.jwtService.verify(token);
-      return !!decoded;
+      const decoded = this.jwtService.verify(token, { ignoreExpiration: true });
+      return decoded;
     } catch (error) {
       throw new UnauthorizedException(
         'Token verification failed: ' + error.message,
@@ -41,27 +41,11 @@ export class AuthService {
     }
   }
 
-  // Método en AuthService para decodificar tokens
-  async decodeToken(
-    token: string,
-    ignoreExpiration: boolean = false,
-  ): Promise<any> {
-    try {
-      return this.jwtService.verify(token, {
-        ignoreExpiration: ignoreExpiration,
-      });
-    } catch (error) {
-      throw new UnauthorizedException(
-        'Token verification failed: ' + error.message,
-      );
-    }
-  }
-
-  async refreshToken(user: any) {
-    const payload = { email: user.email, sub: user.id };
+  async refreshToken(decodedUser: any) {
+    const payload = { email: decodedUser.email, sub: decodedUser.sub };
     return {
-      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }), // Duración corta para el token de acceso
-      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }), // Duración más larga para el refresh token
+      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }),
+      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }),
     };
   }
 }
