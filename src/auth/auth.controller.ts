@@ -44,4 +44,19 @@ export class AuthController {
     }
     return { message: 'Token is valid' };
   }
+
+  @Post('refresh-token')
+  async refreshToken(@Req() request: Request) {
+    const authHeader = request.headers['authorization'];
+    if (!authHeader) {
+      throw new UnauthorizedException('No token provided');
+    }
+    const oldToken = authHeader.split(' ')[1];
+    try {
+      const newToken = await this.authService.refreshToken(oldToken);
+      return { access_token: newToken };
+    } catch (error) {
+      throw new UnauthorizedException('Token refresh failed: ' + error.message);
+    }
+  }
 }

@@ -40,4 +40,12 @@ export class AuthService {
       );
     }
   }
+
+  async refreshToken(user: any) {
+    const payload = { username: user.email, sub: user.id };
+    return {
+      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }), // Duración corta para el token de acceso
+      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }), // Duración más larga para el refresh token
+    };
+  }
 }
