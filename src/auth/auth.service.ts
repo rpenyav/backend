@@ -44,6 +44,17 @@ export class AuthService {
       );
     }
   }
+
+  async decodeRefreshToken(token: string): Promise<any> {
+    try {
+      return this.jwtService.verify(token, { ignoreExpiration: true }); // Ignora la expiración para refresh token
+    } catch (error) {
+      throw new UnauthorizedException(
+        'Token verification failed: ' + error.message,
+      );
+    }
+  }
+
   async verifyToken(token: string): Promise<boolean> {
     try {
       const decoded = this.jwtService.verify(token);
