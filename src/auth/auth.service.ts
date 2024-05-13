@@ -41,15 +41,15 @@ export class AuthService {
     }
   }
 
-  async refreshToken(oldToken: string) {
-    const { email, sub } = this.jwtService.verify(oldToken) as {
+  async refreshToken(user: any) {
+    const { email, sub } = this.jwtService.verify(user) as {
       email: string;
       sub: string;
     };
-    const payload = { email, sub }; // Incluir el correo electrónico en el payload
+    const payload = { email, sub };
     return {
-      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }),
-      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }),
+      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }), // Duración corta para el token de acceso
+      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }), // Duración más larga para el refresh token
     };
   }
 }
