@@ -23,24 +23,27 @@ export class AuthService {
     return null;
   }
 
+  // En src/auth/auth.service.ts
   async login(user: any) {
-    const payload = { email: user.email, sub: user.id }; // Incluir el correo electrónico en el payload
+    const payload = { email: user.email, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }), // Cambiado de 1m a 15m
     };
   }
 
-  // Método para decodificar el token
   async decodeToken(token: string): Promise<any> {
     try {
-      return this.jwtService.verify(token); // Retorna los datos decodificados si el token es válido
+      return this.jwtService.verify(token);
     } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        // Manejar específicamente la expiración del token, si es necesario
+        throw new UnauthorizedException('Token expired');
+      }
       throw new UnauthorizedException(
         'Token verification failed: ' + error.message,
       );
     }
   }
-
   async verifyToken(token: string): Promise<boolean> {
     try {
       const decoded = this.jwtService.verify(token);
