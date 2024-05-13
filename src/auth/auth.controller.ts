@@ -45,30 +45,18 @@ export class AuthController {
     return { message: 'Token is valid' };
   }
 
-  // En src/auth/auth.controller.ts
   @Post('refresh-token')
   async refreshToken(@Req() request: Request) {
     const authHeader = request.headers['authorization'];
     if (!authHeader) {
       throw new UnauthorizedException('No token provided');
     }
-    const refreshToken = authHeader.split(' ')[1];
+    const oldToken = authHeader.split(' ')[1];
     try {
-      // Asumiendo que tienes un método separado para verificar y decodificar refresh tokens
-      const decodedUser =
-        await this.authService.decodeRefreshToken(refreshToken);
-      if (!decodedUser) {
-        throw new UnauthorizedException('Invalid refresh token');
-      }
-
-      // Renueva el token con la información del usuario decodificado
-      const newTokens = await this.authService.refreshToken(decodedUser);
-      return {
-        access_token: newTokens.access_token,
-        refresh_token: newTokens.refresh_token,
-      };
+      const newToken = await this.authService.refreshToken(oldToken);
+      return { access_token: newToken };
     } catch (error) {
-      throw new UnauthorizedException(`Token refresh failed: ${error.message}`);
+      throw new UnauthorizedException('Token refresh failed: ' + error.message);
     }
   }
 }
