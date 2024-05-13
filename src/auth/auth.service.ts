@@ -30,7 +30,7 @@ export class AuthService {
     };
   }
 
-  // En src/auth/auth.service.ts
+  // Método para decodificar el token
   async decodeToken(token: string): Promise<any> {
     try {
       return this.jwtService.verify(token); // Retorna los datos decodificados si el token es válido
@@ -52,12 +52,12 @@ export class AuthService {
     }
   }
 
-  // Asegura que este código ya está presente o ajustado de acuerdo a la descripción anterior
-  async refreshToken(decodedUser: any) {
-    const payload = { email: decodedUser.email, sub: decodedUser.sub };
+  // src/auth/auth.service.ts
+  async refreshToken(user: any) {
+    const payload = { email: user.email, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }),
-      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }),
+      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }), // 15 minutos
+      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }), // 7 días
     };
   }
 }
