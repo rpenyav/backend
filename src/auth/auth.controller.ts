@@ -53,8 +53,13 @@ export class AuthController {
     }
     const oldToken = authHeader.split(' ')[1];
     try {
-      const newToken = await this.authService.refreshToken(oldToken);
-      return { access_token: newToken };
+      // Decodifica el token antiguo para obtener la información del usuario
+      const decodedUser = await this.authService.decodeToken(oldToken);
+      const newTokens = await this.authService.refreshToken(decodedUser);
+      return {
+        access_token: newTokens.access_token,
+        refresh_token: newTokens.refresh_token,
+      };
     } catch (error) {
       throw new UnauthorizedException('Token refresh failed: ' + error.message);
     }
