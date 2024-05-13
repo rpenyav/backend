@@ -43,7 +43,7 @@ export class AuthService {
 
   async decodeToken(token: string): Promise<any> {
     try {
-      return this.jwtService.verify(token);
+      return this.jwtService.verify(token); // Asegúrate de que esté configurado para manejar la verificación de manera apropiada
     } catch (error) {
       throw new UnauthorizedException(
         'Token verification failed: ' + error.message,
@@ -52,15 +52,10 @@ export class AuthService {
   }
 
   async refreshToken(user: any) {
-    if (!user || !user.email) {
-      throw new UnauthorizedException(
-        'No user email provided for token generation.',
-      );
-    }
     const payload = { email: user.email, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }),
-      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }),
+      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }), // Duración corta para el token de acceso
+      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }), // Duración más larga para el refresh token
     };
   }
 }
