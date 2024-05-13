@@ -42,11 +42,7 @@ export class AuthService {
   }
 
   async refreshToken(user: any) {
-    const { email, sub } = this.jwtService.verify(user) as {
-      email: string;
-      sub: string;
-    };
-    const payload = { email, sub };
+    const payload = { username: user.email, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload, { expiresIn: '15m' }), // Duración corta para el token de acceso
       refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }), // Duración más larga para el refresh token
