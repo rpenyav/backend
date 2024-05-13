@@ -30,6 +30,17 @@ export class AuthService {
     };
   }
 
+  // En src/auth/auth.service.ts
+  async decodeToken(token: string): Promise<any> {
+    try {
+      return this.jwtService.verify(token); // Retorna los datos decodificados si el token es válido
+    } catch (error) {
+      throw new UnauthorizedException(
+        'Token verification failed: ' + error.message,
+      );
+    }
+  }
+
   async verifyToken(token: string): Promise<boolean> {
     try {
       const decoded = this.jwtService.verify(token);
@@ -41,11 +52,12 @@ export class AuthService {
     }
   }
 
-  async refreshToken(user: any) {
-    const payload = { username: user.email, sub: user.id };
+  // Asegura que este código ya está presente o ajustado de acuerdo a la descripción anterior
+  async refreshToken(decodedUser: any) {
+    const payload = { email: decodedUser.email, sub: decodedUser.sub };
     return {
-      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }), // Duración corta para el token de acceso
-      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }), // Duración más larga para el refresh token
+      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }),
+      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }),
     };
   }
 }
