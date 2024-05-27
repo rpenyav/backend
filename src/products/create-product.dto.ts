@@ -1,9 +1,7 @@
-import { IsString, IsNumber } from 'class-validator';
+// src/services/create-product.dto.ts
+import { IsString, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateProductDto {
-  @IsNumber()
-  productIdCategory: number;
-
   @IsString()
   productName: string;
 
@@ -21,4 +19,11 @@ export class CreateProductDto {
 
   @IsNumber()
   productRate: number;
+
+  @IsOptional()
+  @IsString()
+  productImage?: string;
+
+  @IsNumber()
+  productIdCategory: number;
 }

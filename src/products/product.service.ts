@@ -72,10 +72,36 @@ export class ProductService {
     });
   }
 
-  async getProductsByCategory(categoryId: number): Promise<Product[]> {
-    return this.productRepository.find({
-      where: { productIdCategory: { id: categoryId } },
-      relations: ['productIdCategory'],
-    });
+  async getProductsByCategory(
+    categoryId: number,
+    page: number,
+    limit: number,
+    orderBy?: string,
+    orderDirection?: 'ASC' | 'DESC',
+  ): Promise<PaginatedResponse<Product>> {
+    const skip = (page - 1) * limit;
+    let query = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.productIdCategory', 'category')
+      .where('category.id = :categoryId', { categoryId })
+      .skip(skip >= 0 ? skip : 0)
+      .take(limit > 0 ? limit : 10);
+
+    if (orderBy && orderDirection) {
+      query = query.orderBy(`product.${orderBy}`, orderDirection);
+    }
+
+    const [list, totalElements] = await query.getManyAndCount();
+    const totalPages = Math.ceil(totalElements / limit);
+    const isLast = page === totalPages;
+
+    return {
+      list,
+      pageNumber: page,
+      pageSize: limit,
+      totalElements,
+      totalPages,
+      isLast,
+    };
   }
 }

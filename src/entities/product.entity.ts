@@ -34,4 +34,7 @@ export class Product {
 
   @Column()
   productRate: number;
+
+  @Column({ nullable: true })
+  productImage: string;
 }

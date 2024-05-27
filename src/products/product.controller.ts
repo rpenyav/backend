@@ -1,14 +1,5 @@
 // src/controllers/product.controller.ts
-import {
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  Query,
-  Body,
-} from '@nestjs/common';
-import { CreateProductDto } from './create-product.dto';
+import { Controller, Get, Param, Query, ParseIntPipe } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { PaginatedResponse } from './paginated-response.dto';
 import { Product } from 'src/entities/product.entity';
@@ -16,11 +7,6 @@ import { Product } from 'src/entities/product.entity';
 @Controller('products')
 export class ProductController {
   constructor(private productService: ProductService) {}
-
-  @Post('add')
-  createProduct(@Body() createProductDto: CreateProductDto) {
-    return this.productService.createProduct(createProductDto);
-  }
 
   @Get('get')
   getAllProducts(
@@ -38,16 +24,26 @@ export class ProductController {
   }
 
   @Get(':id')
-  async getProductById(
+  getProductById(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Product | undefined> {
     return this.productService.getProductById(id);
   }
 
   @Get('category/:categoryId')
-  async getProductsByCategory(
+  getProductsByCategory(
     @Param('categoryId', ParseIntPipe) categoryId: number,
-  ): Promise<Product[]> {
-    return this.productService.getProductsByCategory(categoryId);
+    @Query('page', ParseIntPipe) page: number = 1,
+    @Query('limit', ParseIntPipe) limit: number = 10,
+    @Query('orderBy') orderBy?: string,
+    @Query('orderDirection') orderDirection: 'ASC' | 'DESC' = 'ASC',
+  ): Promise<PaginatedResponse<Product>> {
+    return this.productService.getProductsByCategory(
+      categoryId,
+      page,
+      limit,
+      orderBy,
+      orderDirection,
+    );
   }
 }
