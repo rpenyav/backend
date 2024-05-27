@@ -24,10 +24,9 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { email: user.email, sub: user.id };
+    const payload = { username: user.email, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }),
-      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }), // Asegura incluir también aquí el email si es necesario
+      access_token: this.jwtService.sign(payload),
     };
   }
 
@@ -42,25 +41,11 @@ export class AuthService {
     }
   }
 
-  async decodeToken(
-    token: string,
-    ignoreExpiration: boolean = false,
-  ): Promise<any> {
-    try {
-      return this.jwtService.verify(token, {
-        ignoreExpiration: ignoreExpiration,
-      });
-    } catch (error) {
-      throw new UnauthorizedException(
-        'Token verification failed: ' + error.message,
-      );
-    }
-  }
-  async refreshToken(decodedUser: any) {
-    const payload = { email: decodedUser.email, sub: decodedUser.sub };
+  async refreshToken(user: any) {
+    const payload = { username: user.email, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }),
-      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }),
+      access_token: this.jwtService.sign(payload, { expiresIn: '15m' }), // Duración corta para el token de acceso
+      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }), // Duración más larga para el refresh token
     };
   }
 }

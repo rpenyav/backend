@@ -14,6 +14,10 @@ import { ProjectService } from './projects/project.service';
 import { Comments } from './entities/comments.entity';
 import { CommentsController } from './comments/comments.controller';
 import { CommentsService } from './comments/comments.service';
+import { ProductController } from './products/product.controller';
+import { ProductService } from './products/product.service';
+import { ProductCategory } from './entities/product-category.entity';
+import { Product } from './entities/product.entity';
 
 @Module({
   imports: [
@@ -27,10 +31,17 @@ import { CommentsService } from './comments/comments.service';
       username: 'qaei887',
       password: 'JRK441e22',
       database: 'qaei887',
-      entities: [User, TestSuite, Projects, Comments],
+      entities: [User, TestSuite, Projects, Comments, Product, ProductCategory],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User, TestSuite, Projects, Comments]),
+    TypeOrmModule.forFeature([
+      User,
+      TestSuite,
+      Projects,
+      Comments,
+      Product,
+      ProductCategory,
+    ]),
     AuthModule,
   ],
   controllers: [
@@ -38,7 +49,14 @@ import { CommentsService } from './comments/comments.service';
     TestSuiteController,
     ProjectController,
     CommentsController,
+    ProductController,
   ],
-  providers: [UserService, TestSuiteService, ProjectService, CommentsService],
+  providers: [
+    UserService,
+    TestSuiteService,
+    ProjectService,
+    CommentsService,
+    ProductService,
+  ],
 })
 export class AppModule {}

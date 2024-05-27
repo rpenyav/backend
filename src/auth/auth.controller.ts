@@ -51,21 +51,10 @@ export class AuthController {
     if (!authHeader) {
       throw new UnauthorizedException('No token provided');
     }
-    const refreshToken = authHeader.split(' ')[1];
+    const oldToken = authHeader.split(' ')[1];
     try {
-      const decodedUser = await this.authService.decodeToken(
-        refreshToken,
-        true,
-      ); // Ignorando expiración
-      if (!decodedUser || !decodedUser.email) {
-        throw new UnauthorizedException('Invalid refresh token');
-      }
-
-      const newTokens = await this.authService.refreshToken(decodedUser);
-      return {
-        access_token: newTokens.access_token,
-        refresh_token: newTokens.refresh_token,
-      };
+      const newToken = await this.authService.refreshToken(oldToken);
+      return { access_token: newToken };
     } catch (error) {
       throw new UnauthorizedException('Token refresh failed: ' + error.message);
     }
