@@ -15,14 +15,37 @@ export class UserService {
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const { name, age, email, password } = createUserDto;
+    const {
+      name,
+      surname,
+      age,
+      email,
+      password,
+      address,
+      postalcode,
+      phone1,
+      phone2,
+      especialidad,
+      startDate,
+      role,
+      isActive,
+    } = createUserDto;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = this.userRepository.create({
       name,
+      surname,
       age,
       password: hashedPassword,
       email,
+      address,
+      postalcode,
+      phone1,
+      phone2,
+      especialidad,
+      startDate,
+      role,
+      isActive,
     });
 
     await this.userRepository.save(newUser);
@@ -33,7 +56,7 @@ export class UserService {
     const user = await this.userRepository.findOne({ where: { email } });
     if (user) {
       const { password, ...userWithoutPassword } = user;
-      return userWithoutPassword;
+      return userWithoutPassword as UserDto;
     }
     return undefined;
   }

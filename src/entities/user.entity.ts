@@ -1,19 +1,47 @@
+// src/entities/user.entity.ts
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity() // Esto indica que la clase es una entidad de base de datos.
+@Entity()
 export class User {
-  @PrimaryGeneratedColumn() // Esto indica que esta columna es un ID generado automáticamente.
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column() // Esto define una columna normal en la tabla.
+  @Column()
   name: string;
 
-  @Column() // Otra columna normal.
+  @Column()
+  surname: string;
+
+  @Column()
   age: number;
 
-  @Column() // Esto añade una columna para la contraseña del usuario.
+  @Column()
   password: string;
 
-  @Column({ unique: true }) // Asegúrate de que el email sea único
+  @Column({ unique: true })
   email: string;
+
+  @Column({ type: 'enum', enum: ['paciente', 'admin', 'doctor', 'cliente'] })
+  role: string;
+
+  @Column()
+  address: string;
+
+  @Column()
+  postalcode: string;
+
+  @Column()
+  phone1: string;
+
+  @Column()
+  phone2: string;
+
+  @Column()
+  especialidad: string;
+
+  @Column({ type: 'date', nullable: true })
+  startDate: Date;
+
+  @Column({ type: 'tinyint', default: 1 })
+  isActive: boolean;
 }
