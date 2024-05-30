@@ -1,5 +1,5 @@
 // src/candidatos/candidatos.controller.ts
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Delete, Param } from '@nestjs/common';
 import { CandidatosService } from './candidatos.service';
 import { CheckCandidatoDto } from './check-candidato.dto';
 import { Candidato } from 'src/entities/candidato.entity';
@@ -21,5 +21,10 @@ export class CandidatosController {
         await this.candidatosService.addCandidato(checkCandidatoDto);
       return { exists: false, candidato };
     }
+  }
+
+  @Delete(':id')
+  async deleteCandidato(@Param('id') id: number): Promise<{ message: string }> {
+    return this.candidatosService.deleteCandidato(id);
   }
 }
