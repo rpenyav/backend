@@ -18,6 +18,12 @@ import { ProductController } from './products/product.controller';
 import { ProductService } from './products/product.service';
 import { ProductCategory } from './entities/product-category.entity';
 import { Product } from './entities/product.entity';
+import { Consulta } from './entities/consulta.entity';
+import { ConsultasController } from './consultas/consultas.controller';
+import { ConsultasService } from './consultas/consultas.service';
+import { Tratamiento } from './entities/tratamiento.entity';
+import { ProductoAplicado } from './entities/producto-aplicado.entity';
+import { Candidato } from './entities/candidato.entity';
 
 @Module({
   imports: [
@@ -31,7 +37,18 @@ import { Product } from './entities/product.entity';
       username: 'qaei887',
       password: 'JRK441e22',
       database: 'qaei887',
-      entities: [User, TestSuite, Projects, Comments, Product, ProductCategory],
+      entities: [
+        User,
+        TestSuite,
+        Projects,
+        Comments,
+        Product,
+        ProductCategory,
+        Consulta,
+        Tratamiento,
+        ProductoAplicado,
+        Candidato,
+      ],
       synchronize: true,
     }),
     TypeOrmModule.forFeature([
@@ -41,6 +58,10 @@ import { Product } from './entities/product.entity';
       Comments,
       Product,
       ProductCategory,
+      Consulta,
+      Tratamiento,
+      ProductoAplicado,
+      Candidato,
     ]),
     AuthModule,
   ],
@@ -50,6 +71,7 @@ import { Product } from './entities/product.entity';
     ProjectController,
     CommentsController,
     ProductController,
+    ConsultasController,
   ],
   providers: [
     UserService,
@@ -57,6 +79,7 @@ import { Product } from './entities/product.entity';
     ProjectService,
     CommentsService,
     ProductService,
+    ConsultasService,
   ],
 })
 export class AppModule {}

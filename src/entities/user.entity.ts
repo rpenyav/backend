@@ -1,7 +1,8 @@
 // src/entities/user.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Candidato } from './candidato.entity';
 
-@Entity()
+@Entity('user')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -44,4 +45,7 @@ export class User {
 
   @Column({ type: 'tinyint', default: 1 })
   isActive: boolean;
+
+  @OneToMany(() => Candidato, (candidato) => candidato.user)
+  candidaturas: Candidato[];
 }
