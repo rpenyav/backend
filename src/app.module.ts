@@ -24,6 +24,8 @@ import { ConsultasService } from './consultas/consultas.service';
 import { Tratamiento } from './entities/tratamiento.entity';
 import { ProductoAplicado } from './entities/producto-aplicado.entity';
 import { Candidato } from './entities/candidato.entity';
+import { CandidatosController } from './candidatos/candidatos.controller';
+import { CandidatosService } from './candidatos/candidatos.service';
 
 @Module({
   imports: [
@@ -72,6 +74,7 @@ import { Candidato } from './entities/candidato.entity';
     CommentsController,
     ProductController,
     ConsultasController,
+    CandidatosController,
   ],
   providers: [
     UserService,
@@ -80,6 +83,7 @@ import { Candidato } from './entities/candidato.entity';
     CommentsService,
     ProductService,
     ConsultasService,
+    CandidatosService,
   ],
 })
 export class AppModule {}
